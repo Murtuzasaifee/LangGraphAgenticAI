@@ -16,9 +16,9 @@ jobs:
           lfs: false
           
       - name: Ignore large files
-        run : git filter-branch --index-filter 'git rm -rf --cached --ignore-unmatch HEAD
+        run : git filter-branch --index-filter 'git rm -rf --cached --ignore-unmatch' HEAD
 
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://huggingface.co/spaces/msaifee/Agentic-AI main
+        run: git push --force https://msaifee:$HF_TOKEN@huggingface.co/spaces/msaifee/Agentic-AI main
