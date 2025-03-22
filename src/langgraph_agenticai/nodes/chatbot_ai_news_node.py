@@ -23,6 +23,7 @@ class ChatbotAINewsNode:
         3. Include relevant sources from search results
         4. Explain technical terms when needed
         5. Maintain neutral, objective tone
+        6. Provide a summary of key points and future trends
         
         Provide only information about the AI News and Trends. For other queries, please respond with the reson that you are only the AI News Expert.
         """
