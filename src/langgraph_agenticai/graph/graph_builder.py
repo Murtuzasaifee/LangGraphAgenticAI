@@ -4,6 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from src.langgraph_agenticai.state.state import State
 from src.langgraph_agenticai.nodes.basic_chatbot_node import BasicChatbotNode
 from src.langgraph_agenticai.nodes.chatbot_with_tools_node import ChatbotWithToolsNode
+from src.langgraph_agenticai.nodes.chatbot_ai_news_node import ChatbotAINewsNode
 from src.langgraph_agenticai.tools.search_tool import get_tools, create_tool_node
 
 class GraphBuilder:
@@ -55,6 +56,31 @@ class GraphBuilder:
          self.graph_builder.add_edge(START,"chatbot")
          self.graph_builder.add_conditional_edges("chatbot", tools_condition)
          self.graph_builder.add_edge("tools", "chatbot")
+    
+    def chatbot_ai_news_biuld_graph(self):
+        """
+        Chatbot which provided AI News 
+        
+        """
+        ## Define the tool and tool node
+        tools = get_tools()
+        tool_node = create_tool_node(tools)
+         
+        ## Define the LLM
+        llm = self.llm
+         
+        ## Define Chatbot node
+        obj_chatbot_ai_news_node = ChatbotAINewsNode(llm)
+        chatbot_node = obj_chatbot_ai_news_node.create_ai_new_chatbot(tools)
+         
+        ## Add nodes
+        self.graph_builder.add_node("chatbot", chatbot_node)
+        self.graph_builder.add_node("tools", tool_node)
+         
+        ## define conditional and direct edges
+        self.graph_builder.add_edge(START,"chatbot")
+        self.graph_builder.add_conditional_edges("chatbot", tools_condition)
+        self.graph_builder.add_edge("tools", "chatbot")
          
         
     def setup_graph(self, usecase: str):
@@ -66,5 +92,9 @@ class GraphBuilder:
 
         if usecase == "Chatbot with Tool":
             self.chatbot_with_tools_build_graph()
+            
+        if usecase == "AI News":
+            self.chatbot_ai_news_biuld_graph()   
+            pass 
             
         return self.graph_builder.compile()
